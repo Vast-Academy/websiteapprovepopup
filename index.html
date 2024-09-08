@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Lobster+Two:700|Poppins&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+        /* Preloader Styles */
+    #preloader {
+   position: fixed;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   /* background: white; */
+   display: none; /* Hidden by default */
+   justify-content: center;
+   align-items: center;
+   z-index: 999999999999; 
+}
+
+.spinner {
+   border: 8px solid #f3f3f3;
+   border-top: 8px solid #3498db;
+   border-radius: 50%;
+   width: 60px;
+   height: 60px;
+   animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+        
+          .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+          }
+          .website-approved{
+            top: 40%;
+            position: fixed;
+            opacity: 0;
+            visibility: hidden;
+            background: white;
+            height: auto;
+            width: 400px;
+            /* height: 500px; */
+            padding: 30px;
+            border-radius: 5px;
+            border: 1px solid #0c2e33;
+            z-index: 999;
+            box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+          }
+          .website-approved.show-approved{
+            top: 50%;
+            opacity: 1;
+            visibility: visible;
+            transition: 0.4s;
+          }
+          .website-approved .fa-times {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #0c2e33;
+            height: 45px;
+            width: 50px;
+            line-height: 40px;
+            color: white;
+            font-size: 18px;
+            border-radius: 0 5px 0 50px;
+            padding-left: 13px;
+            cursor: pointer;
+          }
+          .modal-box {
+            top: 40%;
+            position: fixed;
+            opacity: 0;
+            visibility: hidden;
+            background: white;
+            height: auto;
+            width: 400px;
+            /* height: 500px; */
+            padding: 30px;
+            border-radius: 5px;
+            border: 1px solid #0c2e33;
+            z-index: 999;
+            box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+          }
+          .modal-box.show-modal {
+            top: 50%;
+            opacity: 1;
+            visibility: visible;
+            transition: 0.4s;
+          }
+          .outer-blur{
+            position: fixed;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+       backdrop-filter: blur(8px); /* Apply blur to the background */
+       z-index: 999998; /* Ensure it's below the modal */
+       display: none;
+       cursor: pointer;
+          }
+          .show-blur{
+            display: block;
+          }
+    
+          .modal-overlay {
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+       backdrop-filter: blur(8px); /* Apply blur to the background */
+       z-index: 999998; /* Ensure it's below the modal */
+       display: none;
+      cursor: pointer;
+    }
+    
+    /* Show modal and overlay */
+    .show-modal {
+       display: block;
+    }
+    
+    .show-overlay {
+       display: block;
+    }
+          .modal-box .fa-times {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #0c2e33;
+            height: 45px;
+            width: 50px;
+            line-height: 40px;
+            color: white;
+            font-size: 18px;
+            border-radius: 0 5px 0 50px;
+            padding-left: 13px;
+            cursor: pointer;
+          }
+          .fa-times:hover {
+            font-size: 22px;
+          }
+          .modal-box .icon1 {
+            font-size: 60px;
+            background: #0c2e33;
+            height: 120px;
+            width: 120px;
+            color: white;
+            border-radius: 50%;
+            line-height: 120px;
+            text-align: center;
+            margin-bottom: 10px;
+          }
+          .modal-box header {
+            font-size: 29px;
+            /* font-family: 'Lobster Two'; */
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: black;
+          }
+          .modal-box p {
+            line-height: 22px;
+            color: rgb(92, 90, 90);
+            margin-bottom: 20px;
+          }
+          .modal-box h4 {
+            font-weight: 400;
+          }
+          button#approve {
+            height: 45px;
+            width: 95%;
+            border-radius: 5px;
+            margin-top: 15px;
+            background: #0c2e33;
+            color: white;
+            font-size: 22px;
+            border: 1px solid #0c2e33;
+            letter-spacing: 1px;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+          }
+          
+          button#approve:hover {
+            background: #0c2e33;
+            border: 1px solid #0c2e33;
+            letter-spacing: 2px;
+          }
+          .new-content {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+          }
+          .new-content .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+          }
+          .new-content .buttons button {
+            width: 45%;
+            height: 45px;
+            font-size: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            background: #0c2e33;
+            color: white;
+            font-size: 22px;
+            border: 1px solid #0c2e33;
+            letter-spacing: 1px;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+          }
+          .after-approval {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+          }
+          .new-content .buttons button:hover{
+            background: #0c2e33;
+            border: 1px solid #0c2e33;
+            letter-spacing: 2px;
+          }
+          div.main-box{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 95%;
+            height: 45px;
+            letter-spacing: 1px;
+           margin-top: 15px;
+           margin-left: 8px; 
+          }
+          div.first-box{
+    width: 60px;
+    height: 45px;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+          }
+          div.first-box a i{
+            font-size: 27px;
+            color: black;
+            
+          }
+          div.first-box a i:hover{
+            zoom:0.9;
+          }
+          div.third-box a i:hover{
+            zoom:0.9;
+          }
+          div.second-box{
+    width: 175px;
+    height: 45px;
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 22px;
+    background-color: #0c2e33;
+    color: white;
+          }
+    
+          div.second-box a{
+            color: white;
+            letter-spacing: 1px;
+            text-decoration: none;
+          }
+          div.second-box a:hover{
+            color: white;
+            letter-spacing: 2px;
+          }
+          div.third-box{
+    width: 60px;
+    height: 45px;
+    border-radius: 5px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    letter-spacing: 1px;
+    }
+          div.third-box a i{
+            font-size: 33px;
+            font-weight: 600;
+            color: rgb(9, 170, 17);
+          }
+          .new-content input{
+            width: 100%;
+            height: 40px;
+          }
+      </style>
+</head>
+<body>
+
+         <!-- Preloader HTML -->
+         <div id="preloader">
+          <div class="spinner"></div>
+        </div>
+
+    <!-- for approval -->
+  <div class="modal-overlay">
+    <div class="center modal-box">
+      <div class="fas fa-times"></div>
+      <div class="fas fa-envelope icon1"></div>
+      <h5 style="font-weight: 300;margin-bottom:-8px;font-size: 14px;">Message from Developers</h5>
+      <header>VA Computers</header>
+      <p>
+        Full access to the website will be granted once your website has been
+        successfully approved.
+      </p>
+      <button id="approve">Approve Website</button>
+     <div class="main-box">
+      <div class="first-box">
+        <a href="tel:+9356393094"><i class="fas fa-phone-alt"></i></a>
+      </div>
+      <div class="second-box">
+        <a href="https://www.vacomputers.com/">Contact Us</a>
+      </div>
+      <div class="third-box">
+        <a href="https://api.whatsapp.com/send?phone=9356393094"><i class="fab fa-whatsapp"></i></a>
+      </div>
+     </div>
+      
+      <div class="new-content" id="new-content">
+  
+        <p>
+          Please enter the provided approval password and click 'Approve' to finalize the process.
+        </p>
+        <input type="text" id="userPassword">
+        <div class="buttons">
+          <button id="yes-btn">Approve</button>
+          <button id="no-btn">Cancel</button>
+        </div>
+      </div>
+  
+     
+  
+    </div>
+    </div>
+  
+
+    <div class="outer-blur">
+      <div class="center website-approved">
+      <div class="fas fa-times cross"></div>
+      <div class="after-approval" id="after-approval">
+        <h2  style="font-size: 38px; color: black; margin-top:40px;margin-bottom:15px; line-height: 50px;">Congratulations! </h2>
+        <h3 style="font-size: 20px; color: black;margin-bottom: 40px;font-weight: 500;">Your Website has been Approved</h3>
+              <p style="color:#a61d37;font-size: 17px;margin-bottom: 60px; font-weight: 500;">
+                Your 1-month content update trial and 1-year free maintenance service are now active. 
+              </p>
+              <h2  style="font-size: 38px; color: black;line-height: 50px;">Thank You </h2>
+
+              <p style="color:black;font-size: 16px;margin-top: 40px; font-weight: 500;"></p>
+              This Message will disappear after <i class="fas fa-clock"></i> <span id="countdown">30</span> seconds.
+              </p>
+            </div>
+          </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+    checkApprovalStatus().then(isApproved => {
+        const currentUrl = window.location.href;
+        const excludedPaths = ["clients/", "clients/index.html"];
+        const isExcluded = excludedPaths.some(path => currentUrl.includes(path));
+
+        // Retrieve the status of after-approval div closure from localStorage
+        const hasClosedApproval = localStorage.getItem('hasClosedApproval') === 'true';
+
+        if (isApproved && !isExcluded) {
+            if (!hasClosedApproval) {
+                // Start by showing the preloader
+                showPreloader();
+
+                // After 2 seconds, hide the preloader and show the after-approval content
+                setTimeout(() => {
+                    hidePreloader();
+
+                    // Hide modal elements
+                    document.querySelector(".modal-box").style.display = "none";
+                    document.querySelector(".modal-overlay").style.display = "none";
+                    
+                    // Show only the approved website elements
+                    document.querySelector(".outer-blur").style.display = "block";
+                    document.querySelector(".website-approved").classList.add("show-approved");
+                    document.getElementById("after-approval").style.display = "block";
+
+                    // Start the countdown
+                    startCountdown(30);
+
+                    document.querySelector(".cross").addEventListener("click", function () {
+                        closeAfterApproval();
+                    });
+                }, 2000); // 2 seconds delay for preloader
+            }
+        } else {
+            // If website is not approved or is excluded, show the modal
+            document.querySelector(".modal-box").classList.add("show-modal");
+            document.querySelector(".modal-overlay").classList.add("show-overlay");
+            
+            // Reset localStorage to ensure the modal shows up again if needed
+            localStorage.removeItem('hasClosedApproval');
+        }
+    });
+
+    document.querySelector(".outer-blur").addEventListener("click", function () {
+      closeAfterApproval();
+    });
+
+    function startCountdown(seconds) {
+        let countdownElement = document.getElementById('countdown');
+        countdownElement.textContent = seconds;
+
+        let countdownInterval = setInterval(function() {
+            seconds--;
+            countdownElement.textContent = seconds;
+
+            if (seconds <= 0) {
+                clearInterval(countdownInterval);
+                closeAfterApproval();
+            }
+        }, 1000); // 1 second interval
+    }
+
+    function closeAfterApproval() {
+        document.querySelector(".website-approved").classList.remove("show-approved");
+        document.querySelector(".outer-blur").style.display = "none";
+        document.getElementById("after-approval").style.display = "none";
+
+        // Set localStorage item to track that the user has closed the approval message
+        localStorage.setItem('hasClosedApproval', 'true');
+    }
+
+    async function checkApprovalStatus() {
+        let db = firebase.database();
+        return db.ref("project/SLNCollege").once('value').then(snapshot => {
+            const data = snapshot.val();
+            return data && data.approveWebsite === true;
+        }).catch((error) => {
+            console.error("Error fetching data: ", error);
+            return false;
+        });
+    }
+
+   
+
+
+    // document.querySelector(".modal-overlay").addEventListener("click", function () {
+    //   document.querySelector(".modal-overlay").style.display = "none";
+    // });
+
+    // Close modal when clicking on the close icon
+    document.querySelector(".fa-times").addEventListener("click", function () {
+        document.querySelector(".modal-box").classList.remove("show-modal");
+        document.querySelector(".modal-overlay").style.display = "none";
+    });
+
+    // Show new content when "Approve Website" button is clicked
+    document.getElementById("approve").addEventListener("click", function () {
+        document.querySelector(".modal-overlay").classList.remove("show-overlay");
+        showPreloader();
+
+        setTimeout(() => {
+            // Hide preloader after 2 seconds and show the input section
+            hidePreloader();
+            document.querySelector(".modal-box .icon1").style.display = "none";
+            document.querySelector(".modal-box header").style.display = "none";
+            document.querySelector(".modal-box p").style.display = "none";
+            document.querySelector(".modal-box h5").style.display = "none";
+            document.querySelector(".main-box").style.display = "none";
+            document.querySelector(".modal-overlay").style.display = "block";
+            document.getElementById("new-content").style.display = "block";
+            document.getElementById("approve").style.display = "none";
+        }, 500);
+    });
+
+    // Handle the "No" button click
+    document.getElementById("no-btn").addEventListener("click", function () {
+        document.querySelector(".modal-box").classList.remove("show-modal");
+        document.querySelector(".modal-overlay").style.display = "none";
+    });
+
+    // Handle the "Yes" button click and approval
+    document.getElementById("yes-btn").addEventListener("click", function () {
+        document.querySelector(".modal-overlay").style.display = "none";
+        showPreloader();
+
+        const uniquePassword = "2299";
+        const userPassword = document.getElementById("userPassword").value;
+
+        if (userPassword === uniquePassword) {
+            approveWebsite()
+                .then(() => {
+                    hidePreloader();
+                })
+                .catch((error) => {
+                    console.error("Error approving the website:", error);
+                    hidePreloader();
+                });
+        } else {
+            hidePreloader();
+            alert("Wrong password! Please enter the correct password.");
+        }
+    });
+});
+
+// function checkApprovalStatus() {
+//     let db = firebase.database();
+//     return db.ref("project/SLNCollege").once('value').then(snapshot => {
+//         const data = snapshot.val();
+//         return data && data.approveWebsite === true;  
+//     }).catch((error) => {
+//         console.error("Error fetching data: ", error);
+//         return false;
+//     });
+// }
+
+function showPreloader() {
+    document.getElementById('preloader').style.display = 'flex';
+}
+
+function hidePreloader() {
+    document.getElementById('preloader').style.display = 'none';
+}
+
+async function approveWebsite() {
+    return new Promise(async (resolve, reject) => {
+        let db = firebase.database();
+        let data = {
+            "approveWebsite": true
+        };
+
+        try {
+            await db.ref("project/SLNCollege").set(data);
+            console.log("Data saved successfully");
+
+            let projectUpdateResponse = await fetch('https://vacomputers-com-client-api.vercel.app/updateProject', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pro_id: '00019',
+                    progress: '9',
+                    pro_status: 'Your 1-month content update trial and 1-year free maintenance service are now active. Thank you.',
+                    pro_heading: "Congratulations! Your Website Is Approved"
+                })
+            });
+
+            let projectUpdateData = await projectUpdateResponse.json();
+            if (projectUpdateData.status === "success") {
+                console.log("Project node updated successfully:", projectUpdateData);
+            } else {
+                console.error("Error updating project node:", projectUpdateData);
+                return reject(projectUpdateData);
+            }
+
+            let emailResponse = await fetch('https://vacomputers-email-api.vercel.app/update', {
+                method: "POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    mail: 'jasmeetkaur9346@gmail.com',
+                    msg: 'Your 1-month content update trial and 1-year free maintenance service are now active. Thank you.',
+                    pro_heading: 'Congratulations! Your Website Is Approved'
+                })
+            });
+
+            let emailData = await emailResponse.json();
+            console.log('Email API response:', emailData);
+
+            if (emailResponse.ok && emailData.message === "Email sent Successfully!!") {
+                console.log("Email sent successfully");
+
+                setTimeout(() => {
+                    window.location.href = "http://127.0.0.1:5500/index.html";
+                }, 500);
+
+                resolve();
+            } else {
+                console.error('Error in email API response:', emailData);
+                return reject(new Error('Email API responded with an unexpected message or status'));
+            }
+        } catch (error) {
+            console.error("Error in processing:", error);
+            reject(error);
+        }
+    });
+}
+
+    </script>
+      
+
+      
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.9.1/firebase.js"></script>
+
+<script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyBYP6l2oFBgrBFH1xtTAqh3BKQ_o7wNjPk",
+        authDomain: "projectapprove-8c4b9.firebaseapp.com",
+        databaseURL: "https://projectapprove-8c4b9-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "projectapprove-8c4b9",
+        storageBucket: "projectapprove-8c4b9.appspot.com",
+        messagingSenderId: "104517972223",
+        appId: "1:104517972223:web:82e6c9523e28b2ddab5cca",
+        measurementId: "G-TM7T0WK9Z5"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+</script>
+
+
+
+</body>
+</html>
